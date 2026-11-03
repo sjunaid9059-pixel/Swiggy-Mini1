@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: sj-cash-miniapp
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: BOT_TOKEN
+        value: 9230441788:AAEGUm94Mb4J7bn_kj7kJW6BJpEtErRHz2Q
+      - key: ADMIN_IDS
+        value: "5427735251"
+      - key: ALLOW_DEV
+        value: "0"
+      - key: WEBAPP_URL
+        sync: false

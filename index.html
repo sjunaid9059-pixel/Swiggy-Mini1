@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>SJ Cash · Premium</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+  <div class="bg-glow"></div>
+  <div class="bg-grid"></div>
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo-frame">
+        <img src="/static/brand.jpg" alt="SJ" id="brandImg" />
+        <div class="logo-ring"></div>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">SJ CASH</span>
+        <span class="brand-tag">premium · mini app</span>
+      </div>
+    </div>
+    <button class="icon-btn" id="btnRefresh" title="Refresh">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-8 3.58-8 8s3.58 8 8 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+    </button>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="tabs">
+    <button class="tab active" data-tab="home">Home</button>
+    <button class="tab" data-tab="accounts">Accounts</button>
+    <button class="tab" data-tab="claim">Claim</button>
+    <button class="tab" data-tab="tools">Tools</button>
+  </nav>
+
+  <main class="pages">
+    <!-- HOME -->
+    <section class="page active" id="page-home">
+      <div class="hero card glass">
+        <div class="hero-badge">LIVE</div>
+        <h1>Multi-account<br/><span class="grad">Cash Engine</span></h1>
+        <p class="muted">Up to 15 sessions · claim LN / Breakfast / PYO / Diya in one tap</p>
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-val" id="statAccounts">0</div>
+            <div class="stat-lbl">Accounts</div>
+          </div>
+          <div class="stat">
+            <div class="stat-val" id="statLimit">15</div>
+            <div class="stat-lbl">Limit</div>
+          </div>
+          <div class="stat">
+            <div class="stat-val" id="statStatus">●</div>
+            <div class="stat-lbl">Ready</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-grid">
+        <button class="qbtn" data-goto="claim" data-kind="ln">
+          <span class="qicon">🌙</span>
+          <span>Late Night</span>
+        </button>
+        <button class="qbtn" data-goto="claim" data-kind="bf">
+          <span class="qicon">🍳</span>
+          <span>Breakfast</span>
+        </button>
+        <button class="qbtn" data-goto="claim" data-kind="pyo">
+          <span class="qicon">💰</span>
+          <span>50 FC</span>
+        </button>
+        <button class="qbtn" data-goto="claim" data-kind="diya">
+          <span class="qicon">🪔</span>
+          <span>Light Diya</span>
+        </button>
+      </div>
+
+      <div class="card glass tip">
+        <strong>Pro tip</strong>
+        <p>Add accounts from Accounts tab → select offer on Claim → run on all saved sessions at once.</p>
+      </div>
+    </section>
+
+    <!-- ACCOUNTS -->
+    <section class="page" id="page-accounts">
+      <div class="section-head">
+        <h2>Saved Accounts</h2>
+        <button class="pill" id="btnAddAccount">+ Add</button>
+      </div>
+      <div id="accountsList" class="acc-list"></div>
+      <div class="empty" id="accEmpty">No accounts yet. Add via phone OTP or paste JSON.</div>
+    </section>
+
+    <!-- CLAIM -->
+    <section class="page" id="page-claim">
+      <div class="section-head">
+        <h2>Claim Offers</h2>
+      </div>
+
+      <div class="card glass">
+        <label class="lbl">Offer type</label>
+        <div class="seg" id="kindSeg">
+          <button class="seg-btn active" data-kind="ln">Late Night</button>
+          <button class="seg-btn" data-kind="bf">Breakfast</button>
+          <button class="seg-btn" data-kind="pyo">50 FC</button>
+          <button class="seg-btn" data-kind="diya">Diya</button>
+        </div>
+
+        <div id="offerPickWrap">
+          <label class="lbl">Offer</label>
+          <div class="offer-grid" id="offerGrid"></div>
+        </div>
+
+        <label class="lbl">Target accounts</label>
+        <div class="acc-select" id="accSelect"></div>
+
+        <button class="cta" id="btnClaimAll">
+          <span class="cta-shine"></span>
+          Claim on selected
+        </button>
+      </div>
+
+      <div class="card glass log-card" id="claimLog" hidden>
+        <div class="log-head">Live log</div>
+        <pre id="claimLogBody"></pre>
+      </div>
+    </section>
+
+    <!-- TOOLS -->
+    <section class="page" id="page-tools">
+      <div class="section-head"><h2>Account Tools</h2></div>
+
+      <div class="card glass">
+        <h3>Delete → Recreate</h3>
+        <p class="muted small">Uses Swiggy archive OTP flow. After delete, login again to get a fresh full session JSON.</p>
+        <select id="delAccSelect" class="input"></select>
+        <div class="row-btns">
+          <button class="btn soft" id="btnDelOtp">Send delete OTP</button>
+          <button class="btn danger" id="btnDelConfirm">Confirm delete</button>
+        </div>
+        <input class="input" id="delOtpInput" placeholder="Delete OTP" inputmode="numeric" />
+      </div>
+
+      <div class="card glass">
+        <h3>Fresh login (new account)</h3>
+        <input class="input" id="newPhone" placeholder="10-digit mobile" inputmode="numeric" maxlength="10" />
+        <input class="input" id="newName" placeholder="Display name (auto SJ if empty)" />
+        <button class="btn" id="btnSendOtp">Send OTP</button>
+        <input class="input" id="newOtp" placeholder="Login OTP" inputmode="numeric" />
+        <button class="cta" id="btnVerifyOtp">Verify &amp; save session</button>
+      </div>
+
+      <div class="card glass">
+        <h3>Paste session JSON</h3>
+        <textarea class="input area" id="jsonPaste" rows="5" placeholder='{"mobile":"...","token":"...","tid":"...","sid":"...","deviceId":"...","customerId":"..."}'></textarea>
+        <button class="btn" id="btnSaveJson">Save JSON</button>
+      </div>
+
+      <div class="card glass" id="sessionPreview" hidden>
+        <h3>Last session JSON</h3>
+        <pre class="mono" id="sessionJson"></pre>
+        <button class="btn soft" id="btnCopyJson">Copy</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal: add account -->
+  <div class="modal" id="modalAdd" hidden>
+    <div class="modal-card glass">
+      <h3>Add account</h3>
+      <p class="muted small">Phone OTP or paste full session JSON</p>
+      <button class="btn block" id="modalPhone">Phone + OTP</button>
+      <button class="btn soft block" id="modalJson">Paste JSON</button>
+      <button class="btn ghost block" id="modalClose">Close</button>
+    </div>
+  </div>
+
+  <footer class="owner-line">Owner <a href="https://t.me/sjnd88" target="_blank" rel="noopener">@sjnd88</a></footer>
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
